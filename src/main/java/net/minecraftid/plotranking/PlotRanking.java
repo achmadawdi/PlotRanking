@@ -2,6 +2,7 @@ package net.minecraftid.plotranking;
 
 import net.minecraftid.plotranking.commands.Contest;
 import net.minecraftid.plotranking.commands.Ranking;
+import net.minecraftid.plotranking.tabCompleter.tabContest;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -49,7 +50,7 @@ public final class PlotRanking extends JavaPlugin implements Listener {
                 }
             case "contest":
                 if(args.length <= 0){
-                    contest.listContestant(sender);
+                    contest.sendToContest(sender);
                     return true;
                 }
                 if(args[0].equalsIgnoreCase("register")) {
@@ -92,6 +93,15 @@ public final class PlotRanking extends JavaPlugin implements Listener {
         publicConfig = configManager.getConfig("public");
         ranking.init();
         contest.init();
+        tabCompleter();
+    }
+
+    private void tabCompleter(){
+        try {
+            this.getCommand("contest").setTabCompleter( new tabContest());
+        }catch (NullPointerException e){
+            getLogger().info(e.getMessage());
+        }
     }
 
 }
