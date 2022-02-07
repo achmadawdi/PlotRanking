@@ -1,0 +1,13 @@
+name: PlotRanking
+version: '${version}'
+main: net.minecraftid.plotranking.PlotRanking
+api-version: 1.18
+authors: [ MinecraftID ]
+description: Minecraft Plotsquared Ranking
+website: www.minecraft-id.net
+softdepend: [ PlotSquared ]
+commands:
+  PlotRanking:
+    description: PlotRanking
+    usage: /PlotRanking
+    aliases: [ pr ]
