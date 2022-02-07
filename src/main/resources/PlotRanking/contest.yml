@@ -1,0 +1,8 @@
+Contest:
+  name: 'Build Battle I'
+  status: 'Active' #Status Active/Non Active
+  requirement: #Rank that can register
+    - Advance
+  warp: 'BuildBattleI' #Essentials Warp name
+  contestant:
+    - Player

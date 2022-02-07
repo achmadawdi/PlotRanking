@@ -1,6 +1,8 @@
 package net.minecraftid.plotranking;
 
+import net.minecraftid.plotranking.commands.Contest;
 import net.minecraftid.plotranking.commands.Ranking;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -13,11 +15,11 @@ public final class PlotRanking extends JavaPlugin implements Listener {
     Config configManager = new Config();
     YamlConfiguration publicConfig;
     Ranking ranking = new Ranking();
+    Contest contest = new Contest();
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(this,this);
-        publicConfig = configManager.getConfig("public");
-        ranking.init();
+        initConfiguration();
         System.out.print("[PlotRanking] Is enabled");
     }
 
@@ -29,21 +31,67 @@ public final class PlotRanking extends JavaPlugin implements Listener {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, String label, String[] args) {
         String senderName = publicConfig.getString("senderName");
-        if(args.length < 0) return true;
         switch(label) {
             case "pr":
             case "plotranking":
+                if(args.length <= 0) return true;
                 if(args[0].equalsIgnoreCase("info")) {
                     ranking.getRating(sender);
                     return true;
                 }
+                if(args[0].equalsIgnoreCase("reload")){
+                    initConfiguration();
+                    return true;
+                }
                 else{
-                    sender.sendMessage(senderName+"Unknown Commands");
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', senderName+"Commandnya gak ada :'("));
+                    return true;
+                }
+            case "contest":
+                if(args.length <= 0){
+                    contest.listContestant(sender);
+                    return true;
+                }
+                if(args[0].equalsIgnoreCase("register")) {
+                    if(sender.hasPermission("plotranking.contest.register")){
+                        contest.registerContestant(sender);
+                        return true;
+                    };
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&',senderName+"&fRank minimum harus &2Advanced&f atau di atasnya, buat ikutan contest ini, yuk rankup dulu yuk!"));
+                    return true;
+                }
+                if(args[0].equalsIgnoreCase("list")){
+                    contest.listContestant(sender);
+                    return true;
+                }
+                if(sender.hasPermission("plotranking.admin")){
+                    if(args[0].equalsIgnoreCase("enable")) {
+                        contest.enabledContest(sender);
+                        return true;
+                    }
+                    if(args[0].equalsIgnoreCase("disable")) {
+                        contest.disabledContest(sender);
+                        return true;
+                    }
+                    if(args[0].equalsIgnoreCase("reload")){
+                        initConfiguration();
+                        return true;
+                    }
+                    if(args.length <= 1) return true;
+                    if(args[0].equalsIgnoreCase("unregister")) {
+                        contest.unregisterContestant(sender,args[1]);
+                        return true;
+                    }
                 }
             default:
                 return true;
         }
     }
 
+    public void initConfiguration(){
+        publicConfig = configManager.getConfig("public");
+        ranking.init();
+        contest.init();
+    }
 
 }

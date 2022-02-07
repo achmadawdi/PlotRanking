@@ -6,8 +6,17 @@ authors: [ MinecraftID ]
 description: Minecraft Plotsquared Ranking
 website: www.minecraft-id.net
 softdepend: [ PlotSquared ]
+permissions:
+  plotranking:
+    admin:
+    contest:
+      register:
 commands:
   PlotRanking:
     description: PlotRanking
-    usage: /PlotRanking
+    usage: /plotranking
     aliases: [ pr ]
+  Contest:
+    description: Contest
+    usage: /contest
+    aliases: [ ct ]

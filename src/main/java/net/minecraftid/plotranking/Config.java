@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 public class Config {
     public YamlConfiguration loadPublicConfig(Path path){
         File folder = path.toFile();
-        File file = new File(folder,"config.yml");
+        File file = new File(folder, "config.yml");
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdir();
         }
@@ -35,13 +35,13 @@ public class Config {
 
     public YamlConfiguration loadMainConfig(Path path){
         File folder = path.toFile();
-        File file = new File(folder,"/PlotRanking/config.yml");
+        File file = new File(folder,"PlotRanking/config.yml");
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdir();
         }
 
         if(!file.exists()){
-            try (InputStream input = getClass().getResourceAsStream("/public/" + file.getName())) {
+            try (InputStream input = getClass().getResourceAsStream("/PlotRanking/" + file.getName())) {
                 if (input != null) {
                     Files.copy(input, file.toPath());
                 } else {
@@ -54,6 +54,36 @@ public class Config {
         }
 
         return YamlConfiguration.loadConfiguration(file);
+    }
+
+    public YamlConfiguration loadContestConfig(Path path){
+        File folder = path.toFile();
+        File file = new File(folder,"PlotRanking/contest.yml");
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdir();
+        }
+
+        if(!file.exists()){
+            try (InputStream input = getClass().getResourceAsStream("/PlotRanking/" + file.getName())) {
+                if (input != null) {
+                    Files.copy(input, file.toPath());
+                } else {
+                    file.createNewFile();
+                }
+            } catch (IOException exception) {
+                exception.printStackTrace();
+                return null;
+            }
+        }
+
+        return YamlConfiguration.loadConfiguration(file);
+    }
+
+    public File getFileContest(){
+        Path path = Paths.get("./plugins/MinecraftID");
+        File folder = path.toFile();
+        File file = new File(folder,"PlotRanking/contest.yml");
+        return file;
     }
 
     public YamlConfiguration getConfig(String file){
@@ -69,6 +99,10 @@ public class Config {
         if(file.equals("main")){
             config = loadMainConfig(path);
         }
+        if(file.equals("contest")){
+            config = loadContestConfig(path);
+        }
         return config;
     }
+
 }
