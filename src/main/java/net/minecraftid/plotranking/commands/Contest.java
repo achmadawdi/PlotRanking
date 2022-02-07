@@ -59,7 +59,7 @@ public class Contest {
         saveConfig();
 
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&',senderName+"&aYey "+playerName+" berhasil terdaftar ke contest "+ contestConfig.getString("Contest.name")));
-        player.performCommand("/warp "+contestConfig.getString("warp"));
+        player.performCommand("warp "+contestConfig.getString("Contest.warp"));
     }
 
     public void unregisterContestant(CommandSender sender, String nickname){
@@ -78,6 +78,16 @@ public class Contest {
         List<String> listContestant = contestConfig.getStringList("Contest.contestant");
         String contestant = String.join("\n&f&l-&r ", listContestant);
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&',senderName+"&f"+contestConfig.getString("Contest.name")+" Contestant :&r\n- "+contestant));
+    }
+
+    public void sendToContest(CommandSender sender){
+        Player player = (Player) sender;
+        List<String> listContestant = contestConfig.getStringList("Contest.contestant");
+        if(listContestant.contains(player.getName())){
+            player.performCommand("warp "+contestConfig.getString("Contest.warp"));
+            return;
+        }
+        listContestant(sender);
     }
 
     private void saveConfig(){
